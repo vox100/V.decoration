@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="color-scheme" content="dark light">
+    <meta name="description" content="V.decorations - أداة مجانية لزخرفة الأسماء والنصوص العربية والإنجليزية ونسخها بسهولة.">
+    <title>V.decorations - مولد زخارف</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            plugins: [
+                ({ addVariant }) => addVariant('light', ':is(.light &)')
+            ],
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f5ff',
+                            100: '#e0ebff',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                            950: '#0f172a',
+                        },
+                        accent: {
+                            400: '#c084fc',
+                            500: '#a855f7',
+                            600: '#9333ea',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Cairo', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts: Cairo & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Cairo', 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .light body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            color-scheme: light;
+        }
+        .dark body { color-scheme: dark; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        .light ::-webkit-scrollbar-track {
+            background: rgba(241, 245, 249, 0.8);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+
+        /* Card Hover Effects */
+        button { -webkit-tap-highlight-color: transparent; }
+        button:focus-visible, input:focus-visible { outline: 3px solid #60a5fa; outline-offset: 2px; }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+        .decor-card {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .decor-card:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Glassmorphism elements */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .light .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        /* Shimmer gradient animation for highlights */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa 0%, #c084fc 50%, #3b82f6 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            
+        }
+
+.card-solid{background:rgba(30,41,59,.92)}.light .card-solid{background:#fff}
+.field{width:100%;padding:14px 16px;border-radius:16px;border:2px solid #334155;background:#0f172a;color:inherit;font-size:20px;font-weight:700;outline:0}
+.light .field{background:#fff;border-color:#cbd5e1}.field:focus{border-color:#3b82f6}
+.bnav{flex-wrap:wrap;position:fixed;left:0;right:0;bottom:0;z-index:45;display:flex;gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(2,6,23,.97);border-top:1px solid rgba(255,255,255,.08)}
+.light .bnav{background:rgba(255,255,255,.98);border-color:rgba(0,0,0,.08)}
+.bfoot{flex-basis:100%;text-align:center;font-size:14px;font-weight:700;line-height:1.2;color:#94a3b8}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border-radius:18px;color:#94a3b8;font-size:11px;font-weight:700;background:none;border:0}
+.nav-btn i{font-size:18px}.nav-btn.active{background:rgba(59,130,246,.18);color:#60a5fa}
+.symh{font-size:13px;font-weight:700;color:#94a3b8;margin:16px 4px 10px;display:flex;justify-content:space-between}
+.symgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:8px}
+.symgrid.wide{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+.sym{height:52px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:#111827;color:#f1f5f9;font-size:22px;cursor:pointer;overflow:hidden;white-space:nowrap;padding:0 4px}
+.wide .sym{font-size:14px}.sym:active,.sym.ok{background:#2563eb;color:#fff;transform:scale(.95)}
+.light .sym{background:#e2e8f0;color:#0f172a;border-color:#cbd5e1}
+.bigcard{background:rgba(30,41,59,.92);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:12px}
+.light .bigcard{background:#fff;border-color:#e2e8f0}
+.bigpre{direction:ltr;text-align:left;white-space:pre;overflow-x:auto;font:12px/1.15 'Courier New',monospace;margin:8px 0}
+.cbtn{background:rgba(37,99,235,.25);color:#93c5fd;border:1px solid rgba(59,130,246,.4);border-radius:12px;padding:6px 14px;font-weight:700;font-size:12px}
+.cbtn:active{background:#2563eb;color:#fff}
+
+        /* Smooth, lightweight interaction feedback for every button */
+        button {
+            -webkit-tap-highlight-color: transparent;
+            transform-origin: center;
+            transition:
+                transform 180ms cubic-bezier(.2,.8,.2,1),
+                box-shadow 180ms ease,
+                filter 180ms ease;
+        }
+        button:active {
+            transform: scale(.965);
+            filter: brightness(1.08);
+        }
+        @media (hover: hover) and (pointer: fine) {
+            button:hover {
+                filter: brightness(1.06);
+            }
+        }
+        button.tap-feedback {
+            animation: buttonTap .28s cubic-bezier(.2,.8,.2,1);
+        }
+        @keyframes buttonTap {
+            0%   { transform: scale(1); }
+            38%  { transform: scale(.955); }
+            72%  { transform: scale(1.025); }
+            100% { transform: scale(1); }
+        }
+
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80 light:border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- App Identity -->
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 via-accent-500 to-brand-400 p-0.5 shadow-lg shadow-brand-500/20 flex items-center justify-center">
+                    <div class="w-full h-full bg-slate-950 light:bg-white rounded-[14px] flex items-center justify-center">
+                        <span class="font-extrabold text-2xl tracking-tighter gradient-text">V</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="font-black text-2xl tracking-tight text-slate-100 light:text-slate-900">
+                            V<span class="text-brand-500">.decorations</span>
+                        </h1>
+                        
+                    </div>
+                    <p class="text-xs text-slate-400 light:text-slate-500 hidden sm:block">مولد الزخارف الاحترافي الشامل للأسماء والنصوص</p>
+                </div>
+            </div>
+
+            <!-- Top Actions -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Random Quick Copy Button -->
+                <button id="btn-quick-random" type="button" title="نسخ نمط عشوائي فوراً" class="flex items-center gap-2 px-3 py-2 text-xs sm:text-sm font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 light:bg-slate-100 light:hover:bg-slate-200 text-slate-200 light:text-slate-700 transition">
+                    <i class="fa-solid font-bold fa-dice text-brand-400"></i>
+                    <span class="hidden md:inline">نسخ عشوائي</span>
+                </button>
+
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" type="button" title="تغيير الثيم" aria-label="تغيير الثيم" class="w-10 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 light:bg-slate-100 light:hover:bg-slate-200 text-amber-400 light:text-indigo-600 flex items-center justify-center transition">
+                    <span id="theme-icon" class="text-xl leading-none">🌙</span>
+                    
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 pb-28 space-y-6">
+<div id="view-text" class="space-y-6">
+
+        <!-- Input & Controls Box -->
+        <section class="glass-panel rounded-3xl p-4 sm:p-6 shadow-2xl relative overflow-hidden">
+            <div class="absolute -top-24 -left-24 w-60 h-60 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -right-24 w-60 h-60 bg-accent-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10 space-y-4">
+                <!-- Top row inside card: Title + Clear button -->
+                <div class="flex items-center justify-between">
+                    <label for="main-input" class="font-bold text-sm sm:text-base text-slate-200 light:text-slate-700 flex items-center gap-2">
+                        <i class="fa-solid fa-pen-nib text-brand-400"></i>
+                        ادخل النص أو الاسم للزخرفة:
+                    </label>
+                    <div class="flex items-center gap-3">
+                        <span id="char-count" class="text-xs font-mono text-slate-400 light:text-slate-500 bg-slate-900/60 light:bg-slate-200 px-2.5 py-1 rounded-lg">0 حرف</span>
+                        <button id="btn-clear" type="button" class="text-xs font-medium text-rose-400 hover:text-rose-300 transition flex items-center gap-1">
+                            <i class="fa-solid fa-trash-can"></i>
+                            مسح
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Input Field -->
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        id="main-input"
+                        maxlength="160" inputmode="text"
+                        placeholder="اكتب اسمك هنا... (مثال: VOX أو محمد)"
+                        value="V.decorations"
+                        class="w-full bg-slate-900/90 light:bg-white border-2 border-slate-700/80 light:border-slate-300 focus:border-brand-500 light:focus:border-brand-500 rounded-2xl px-5 py-4 text-lg sm:text-2xl font-bold text-slate-100 light:text-slate-900 placeholder-slate-500 outline-none transition duration-200 shadow-inner"
+                        dir="auto"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <!-- Sample Text Chips + Dynamic Mix Toggle -->
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+                    <!-- Sample chips -->
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <span class="text-xs text-slate-400 light:text-slate-500 font-medium">أمثلة سريعة:</span>
+                        <button class="sample-chip text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-brand-600/30 hover:border-brand-500/50 light:bg-slate-100 light:hover:bg-slate-200 text-slate-300 light:text-slate-700 border border-slate-700/50 transition" data-text="V.decorations">V.decorations</button>
+                        <button class="sample-chip text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-brand-600/30 hover:border-brand-500/50 light:bg-slate-100 light:hover:bg-slate-200 text-slate-300 light:text-slate-700 border border-slate-700/50 transition" data-text="محمد">محمد</button>
+                        <button class="sample-chip text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-brand-600/30 hover:border-brand-500/50 light:bg-slate-100 light:hover:bg-slate-200 text-slate-300 light:text-slate-700 border border-slate-700/50 transition" data-text="vox">vox</button>
+                        <button class="sample-chip text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-brand-600/30 hover:border-brand-500/50 light:bg-slate-100 light:hover:bg-slate-200 text-slate-300 light:text-slate-700 border border-slate-700/50 transition" data-text="زنا">زنا</button>
+                        <button class="sample-chip text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-brand-600/30 hover:border-brand-500/50 light:bg-slate-100 light:hover:bg-slate-200 text-slate-300 light:text-slate-700 border border-slate-700/50 transition" data-text="Shadow">Shadow</button>
+                    </div>
+
+                    <!-- Dynamic combination toggle -->
+                    <label class="inline-flex items-center cursor-pointer select-none gap-2">
+                        <span class="text-xs font-semibold text-slate-300 light:text-slate-700">دمج الخطوط مع الإطارات</span>
+                        <input type="checkbox" id="toggle-mix-mode" checked class="sr-only peer">
+                        <div class="relative w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600"></div>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search & Filter Controls -->
+        <section class="space-y-4">
+            <!-- Tabs -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none" id="categories-tabs">
+                <button data-cat="all" class="tab-btn active px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition flex items-center gap-2 bg-brand-600 text-white shadow-lg shadow-brand-500/25">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>الكل</span>
+                    <span id="badge-count-all" class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">0</span>
+                </button>
+                <button data-cat="clean" class="tab-btn px-4 py-2.5 rounded-2xl font-semibold text-xs sm:text-sm whitespace-nowrap transition flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700 light:bg-slate-200 light:hover:bg-slate-300 text-slate-300 light:text-slate-700">
+                    <i class="fa-solid fa-sparkles text-amber-400"></i>
+                    <span>خفيفة ومرتبة</span>
+                </button>
+                <button data-cat="english" class="tab-btn px-4 py-2.5 rounded-2xl font-semibold text-xs sm:text-sm whitespace-nowrap transition flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700 light:bg-slate-200 light:hover:bg-slate-300 text-slate-300 light:text-slate-700">
+                    <i class="fa-solid fa-font text-sky-400"></i>
+                    <span>خطوط إنجليزية</span>
+                </button>
+                <button data-cat="arabic" class="tab-btn px-4 py-2.5 rounded-2xl font-semibold text-xs sm:text-sm whitespace-nowrap transition flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700 light:bg-slate-200 light:hover:bg-slate-300 text-slate-300 light:text-slate-700">
+                    <i class="fa-solid fa-eye text-emerald-400"></i>
+                    <span>زخارف عربية</span>
+                </button>
+                <button data-cat="frames" class="tab-btn px-4 py-2.5 rounded-2xl font-semibold text-xs sm:text-sm whitespace-nowrap transition flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700 light:bg-slate-200 light:hover:bg-slate-300 text-slate-300 light:text-slate-700">
+                    <i class="fa-solid fa-border-none text-purple-400"></i>
+                    <span>إطارات وأقواس</span>
+                </button>
+                <button data-cat="gaming" class="tab-btn px-4 py-2.5 rounded-2xl font-semibold text-xs sm:text-sm whitespace-nowrap transition flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700 light:bg-slate-200 light:hover:bg-slate-300 text-slate-300 light:text-slate-700">
+                    <i class="fa-solid fa-gamepad text-rose-400"></i>
+                    <span>ألعاب ورموز</span>
+                </button>
+                <button data-cat="favorites" class="tab-btn px-4 py-2.5 rounded-2xl font-semibold text-xs sm:text-sm whitespace-nowrap transition flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700 light:bg-slate-200 light:hover:bg-slate-300 text-slate-300 light:text-slate-700">
+                    <i class="fa-solid fa-star text-amber-400"></i>
+                    <span>المفضلة</span>
+                    <span id="badge-count-fav" class="text-[10px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/30">0</span>
+                </button>
+            </div>
+
+            <!-- Search input inside categories bar -->
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute start-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input 
+                    type="text" 
+                    id="search-filter" 
+                    placeholder="ابحث في نتائج الزخرفة..." 
+                    class="w-full bg-slate-900/60 light:bg-white border border-slate-800 light:border-slate-300 focus:border-brand-500 rounded-xl ps-11 pe-4 py-2.5 text-sm text-slate-200 light:text-slate-800 placeholder-slate-500 outline-none"
+                >
+            </div>
+        </section>
+
+        <!-- Results Grid -->
+        <section>
+            <!-- Stats & Batch Action Bar -->
+            <div class="flex items-center justify-between mb-4 px-1">
+                <div class="text-xs text-slate-400 light:text-slate-500 font-semibold flex items-center gap-2">
+                    <span>عدد الزخارف المعروضة:</span>
+                    <span id="results-count" class="font-bold text-brand-400 text-sm">0</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="btn-copy-all" class="text-xs font-bold text-emerald-400 hover:text-white bg-emerald-500/10 hover:bg-emerald-600 border border-emerald-500/20 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5">
+                        <i class="fa-regular fa-copy"></i><span>نسخ النتائج</span>
+                    </button>
+                    <button id="btn-more-mixes" class="text-xs font-bold text-brand-400 hover:text-brand-300 bg-brand-500/10 hover:bg-brand-500/20 border border-brand-500/20 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-arrows-rotate"></i><span>تشكيلات إضافية</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Output Cards Grid -->
+            <div id="decorations-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                <!-- Cards injected dynamically -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="hidden py-16 text-center glass-panel rounded-3xl space-y-4">
+                <div class="w-16 h-16 mx-auto rounded-full bg-slate-800/80 light:bg-slate-200 flex items-center justify-center text-slate-400 text-2xl">
+                    <i class="fa-solid fa-ghost"></i>
+                </div>
+                <div class="space-y-1">
+                    <h3 class="font-bold text-lg text-slate-200 light:text-slate-800">لا توجد نتائج مطابقة</h3>
+                    <p class="text-sm text-slate-400 light:text-slate-500">جرب كتابة كلمة أخرى أو تغيير فئة الفلترة</p>
+                </div>
+            </div>
+        </section>
+</div>
+<section id="view-symbols" class="hidden space-y-3">
+  <input id="sym-search" class="field" style="font-size:15px" placeholder="ابحث عن تصنيف، مثلاً: أسهم" autocomplete="off">
+  <div id="sym-recent-wrap" class="hidden"><h3 class="symh">المنسوخة مؤخراً</h3><div id="sym-recent" class="symgrid"></div></div>
+  <div id="sym-list"></div>
+</section>
+<section id="view-big" class="hidden space-y-3">
+  <div class="bigcard"><label class="symh" style="margin-top:0" for="big-input">اكتب كلمة أو اسم (عربي أو إنجليزي - حتى 10 حروف):</label>
+  <input id="big-input" class="field" maxlength="10" value="VOX" dir="auto" autocomplete="off"></div>
+  <div id="big-list" class="space-y-3"></div>
+</section>
+    </main>
+<nav id="bottom-nav" class="bnav">
+  <button class="nav-btn active" data-view="text"><i class="fa-solid fa-font"></i><span>الحروف</span></button>
+  <button class="nav-btn" data-view="symbols"><i class="fa-regular fa-star"></i><span>الرموز</span></button>
+  <button class="nav-btn" data-view="big"><i class="fa-solid fa-text-height"></i><span>الكتابة الكبيرة</span></button>
+  <div class="bfoot">©VOX2026</div>
+</nav>
+
+    <!-- Footer -->
+
+    <!-- App Logic JavaScript -->
+    <script>
+        // --- UNICODE MAPS & STYLES ENGINE ---
+        const UNICODE_MAPS = {
+            bold: {
+                A:'𝐀', B:'𝐁', C:'𝐂', D:'𝐃', E:'𝐄', F:'𝐅', G:'𝐆', H:'𝐇', I:'𝐈', J:'𝐉', K:'𝐊', L:'𝐋', M:'𝐌', N:'𝐍', O:'𝐎', P:'𝐏', Q:'𝐐', R:'𝐑', S:'𝐒', T:'𝐓', U:'𝐔', V:'𝐕', W:'𝐖', X:'𝐗', Y:'𝐘', Z:'𝐙',
+                a:'𝐚', b:'𝐛', c:'𝐜', d:'𝐝', e:'𝐞', f:'𝐟', g:'𝐠', h:'𝐡', i:'𝐢', j:'𝐣', k:'𝐤', l:'𝐥', m:'𝐦', n:'𝐧', o:'𝐨', p:'𝐩', q:'𝐪', r:'𝐫', s:'𝐬', t:'𝐭', u:'𝐮', v:'𝐯', w:'𝐰', x:'𝐱', y:'𝐲', z:'𝐳',
+                '0':'𝟎', '1':'𝟏', '2':'𝟐', '3':'𝟑', '4':'𝟒', '5':'𝟓', '6':'𝟔', '7':'𝟕', '8':'𝟖', '9':'𝟗'
+            },
+            italic: {
+                A:'𝐴', B:'𝐵', C:'𝐶', D:'𝐷', E:'𝐸', F:'𝐹', G:'𝐺', H:'𝐻', I:'𝐼', J:'𝐽', K:'𝐾', L:'𝐿', M:'𝑀', N:'𝑁', O:'𝑂', P:'𝑃', Q:'𝑄', R:'𝑅', S:'𝑆', T:'𝑇', U:'𝑈', V:'𝑉', W:'𝑊', X:'𝑋', Y:'𝑌', Z:'𝑍',
+                a:'𝑎', b:'𝑏', c:'𝑐', d:'𝑑', e:'𝑒', f:'𝑓', g:'𝑔', h:'ℎ', i:'𝑖', j:'𝑗', k:'𝑘', l:'𝑙', m:'𝑚', n:'𝑛', o:'𝑜', p:'𝑝', q:'𝑞', r:'𝑟', s:'𝑠', t:'𝑡', u:'𝑢', v:'𝑣', w:'𝑤', x:'𝑥', y:'𝑦', z:'𝑧'
+            },
+            boldItalic: {
+                A:'𝑨', B:'𝑩', C:'𝑪', D:'𝑫', E:'𝑬', F:'𝑭', G:'𝑮', H:'𝑯', I:'𝑰', J:'𝑱', K:'𝑲', L:'𝑳', M:'𝑴', N:'𝑵', O:'𝑶', P:'𝑷', Q:'𝑸', R:'𝑹', S:'𝑺', T:'𝑻', U:'𝑼', V:'𝑽', W:'𝑾', X:'𝑿', Y:'𝒀', Z:'𝒁',
+                a:'𝒂', b:'𝒃', c:'𝒄', d:'𝒅', e:'𝒆', f:'𝒇', g:'𝒈', h:'𝒉', i:'𝒊', j:'𝒋', k:'𝒌', l:'𝒍', m:'𝒎', n:'𝒏', o:'𝒐', p:'𝒑', q:'𝒒', r:'𝒓', s:'𝒔', t:'𝒕', u:'𝒖', v:'𝒗', w:'𝒘', x:'𝒙', y:'𝒚', z:'𝒛'
+            },
+            script: {
+                A:'𝒜', B:'ℬ', C:'𝒞', D:'𝒟', E:'ℰ', F:'ℱ', G:'𝒢', H:'ℋ', I:'ℐ', J:'𝒥', K:'𝒦', L:'ℒ', M:'ℳ', N:'𝒩', O:'𝒪', P:'𝒫', Q:'𝒬', R:'ℛ', S:'𝒮', T:'𝒯', U:'𝒰', V:'𝒱', W:'𝒲', X:'𝒳', Y:'𝒴', Z:'𝒵',
+                a:'𝒶', b:'𝒷', c:'𝒸', d:'𝒹', e:'ℯ', f:'𝒻', g:'ℊ', h:'𝒽', i:'𝒾', j:'𝒿', k:'𝓀', l:'𝓁', m:'𝓂', n:'𝓃', o:'ℴ', p:'𝓅', q:'𝓆', r:'𝓇', s:'𝓈', t:'𝓉', u:'𝓊', v:'𝓋', w:'𝓌', x:'𝓍', y:'𝓎', z:'𝓏'
+            },
+            boldScript: {
+                A:'𝓐', B:'𝓑', C:'𝓒', D:'𝓓', E:'𝓔', F:'𝓕', G:'𝓖', H:'𝓗', I:'𝓘', J:'𝓙', K:'𝓚', L:'𝓛', M:'𝓜', N:'𝓝', O:'𝓞', P:'𝓟', Q:'𝓠', R:'𝓡', S:'𝓢', T:'𝓣', U:'𝓤', V:'𝓥', W:'𝓦', X:'𝓧', Y:'𝓨', Z:'𝓩',
+                a:'𝓪', b:'𝓫', c:'𝓬', d:'𝓭', e:'𝓮', f:'𝓯', g:'𝓰', h:'𝓱', i:'𝓲', j:'𝓳', k:'𝓴', l:'𝓵', m:'𝓶', n:'𝓷', o:'𝓸', p:'𝓹', q:'𝓺', r:'𝓻', s:'𝓼', t:'𝓽', u:'𝓾', v:'𝓿', w:'𝔀', x:'𝔁', y:'𝔂', z:'𝔃'
+            },
+            fraktur: {
+                A:'𝔄', B:'𝔅', C:'ℭ', D:'𝔇', E:'𝔈', F:'𝔉', G:'𝔤', H:'ℌ', I:'ℑ', J:'𝔍', K:'𝔎', L:'𝔏', M:'𝔐', N:'𝔑', O:'𝔒', P:'𝔓', Q:'𝔔', R:'ℜ', S:'𝔖', T:'𝔗', U:'𝔘', V:'𝔙', W:'𝔚', X:'𝔛', Y:'𝔜', Z:'ℨ',
+                a:'𝔞', b:'𝔟', c:'𝔠', d:'𝔡', e:'𝔢', f:'𝔣', g:'𝔤', h:'𝔥', i:'𝔦', j:'𝔧', k:'𝔨', l:'𝔩', m:'𝔪', n:'𝔫', o:'𝔬', p:'𝔭', q:'𝔮', r:'𝔯', s:'𝔰', t:'𝔱', u:'𝔲', v:'𝔳', w:'𝔴', x:'𝔵', y:'𝔶', z:'𝔷'
+            },
+            boldFraktur: {
+                A:'𝕬', B:'𝕭', C:'𝕮', D:'𝕯', E:'𝕰', F:'𝕱', G:'𝕲', H:'𝕳', I:'𝕴', J:'𝕵', K:'𝕶', L:'𝕷', M:'𝕸', N:'𝕹', O:'𝕺', P:'𝕻', Q:'𝕼', R:'𝕽', S:'𝕾', T:'𝕿', U:'𝖀', V:'𝖁', W:'𝖂', X:'𝖃', Y:'𝖄', Z:'𝖅',
+                a:'𝖆', b:'𝖇', c:'𝖈', d:'𝖉', e:'𝖊', f:'𝖋', g:'𝖌', h:'𝖍', i:'𝖎', j:'𝖏', k:'𝖐', l:'𝖑', m:'𝖒', n:'𝖓', o:'𝖔', p:'𝖕', q:'𝖖', r:'𝖗', s:'𝖘', t:'𝖙', u:'𝖚', v:'𝖛', w:'𝖜', x:'𝖝', y:'𝖞', z:'𝖟'
+            },
+            doubleStruck: {
+                A:'𝔸', B:'𝔹', C:'ℂ', D:'𝔻', E:'𝔼', F:'𝔽', G:'𝔾', H:'ℍ', I:'𝕀', J:'𝕁', K:'𝕂', L:'𝕃', M:'𝕄', N:'ℕ', O:'𝕆', P:'ℙ', Q:'ℚ', R:'ℝ', S:'𝕊', T:'𝕋', U:'𝕌', V:'𝕍', W:'𝕎', X:'𝕏', Y:'𝕐', Z:'ℤ',
+                a:'𝕒', b:'𝕓', c:'𝕔', d:'𝕕', e:'𝕖', f:'𝕗', g:'𝕘', h:'𝕙', i:'𝕚', j:'𝕛', k:'𝕜', l:'𝕝', m:'𝕞', n:'𝕟', o:'𝕠', p:'𝕡', q:'𝕢', r:'𝕣', s:'𝕤', t:'𝕥', u:'𝕦', v:'𝕧', w:'𝕨', x:'𝕩', y:'𝕪', z:'𝕫',
+                '0':'𝟘', '1':'𝟙', '2':'𝟚', '3':'𝟛', '4':'𝟜', '5':'𝟝', '6':'𝟞', '7':'𝟟', '8':'𝟠', '9':'𝟡'
+            },
+            monospace: {
+                A:'𝙰', B:'𝙱', C:'𝙲', D:'𝙳', E:'𝙴', F:'𝙵', G:'𝙶', H:'𝙷', I:'𝙸', J:'𝙹', K:'𝙺', L:'𝙻', M:'𝙼', N:'𝙽', O:'𝙾', P:'𝙿', Q:'𝚀', R:'𝚁', S:'𝚂', T:'𝚃', U:'𝚄', V:'𝚅', W:'𝚆', X:'𝚇', Y:'𝚈', Z:'𝚉',
+                a:'𝚊', b:'𝚋', c:'𝚌', d:'𝚍', e:'𝚎', f:'𝚏', g:'𝚐', h:'𝚑', i:'𝚒', j:'𝚓', k:'𝚔', l:'𝚕', m:'𝚖', n:'𝚗', o:'𝚘', p:'𝚙', q:'𝚚', r:'𝚛', s:'𝚜', t:'𝚝', u:'𝚞', v:'𝚟', w:'𝚠', x:'𝚡', y:'𝚢', z:'𝚣',
+                '0':'𝟶', '1':'𝟷', '2':'𝟸', '3':'𝟹', '4':'𝟺', '5':'𝟻', '6':'𝟼', '7':'𝟽', '8':'𝟾', '9':'𝟿'
+            },
+            circled: {
+                A:'Ⓐ', B:'Ⓑ', C:'Ⓒ', D:'Ⓓ', E:'Ⓔ', F:'Ⓕ', G:'Ⓖ', H:'Ⓗ', I:'Ⓘ', J:'Ⓙ', K:'Ⓚ', L:'Ⓛ', M:'Ⓜ', N:'Ⓝ', O:'Ⓞ', P:'Ⓟ', Q:'Ⓠ', R:'Ⓡ', S:'Ⓢ', T:'Ⓣ', U:'Ⓤ', V:'Ⓥ', W:'Ⓦ', X:'Ⓧ', Y:'Ⓨ', Z:'Ⓩ',
+                a:'ⓐ', b:'ⓑ', c:'ⓒ', d:'ⓓ', e:'ⓔ', f:'ⓕ', g:'ⓖ', h:'ⓗ', i:'ⓘ', j:'ⓙ', k:'ⓚ', l:'ⓛ', m:'ⓜ', n:'ⓝ', o:'ⓞ', p:'ⓟ', q:'ⓠ', r:'ⓡ', s:'ⓢ', t:'ⓣ', u:'ⓤ', v:'ⓥ', w:'ⓦ', x:'ⓧ', y:'ⓨ', z:'ⓩ',
+                '0':'⓪', '1':'①', '2':'②', '3':'③', '4':'④', '5':'⑤', '6':'⑥', '7':'⑦', '8':'⑧', '9':'⑨'
+            },
+            negativeCircled: {
+                A:'🅐', B:'🅑', C:'🅒', D:'🅓', E:'🅔', F:'🅕', G:'🅖', H:'🅗', I:'🅘', J:'🅙', K:'🅚', L:'🅛', M:'🅜', N:'🅝', O:'🅞', P:'🅟', Q:'🅠', R:'🅡', S:'🅢', T:'🅣', U:'🅤', V:'🅥', W:'🅦', X:'🅧', Y:'🅨', Z:'🅩',
+                a:'🅐', b:'🅑', c:'🅒', d:'🅓', e:'🅔', f:'🅕', g:'🅖', h:'🅗', i:'🅘', j:'🅙', k:'🅚', l:'🅛', m:'🅜', n:'🅝', o:'🅞', p:'🅟', q:'🅠', r:'🅡', s:'🅢', t:'🅣', u:'🅤', v:'🅥', w:'🅦', x:'🅧', y:'🅨', z:'🅩'
+            },
+            squared: {
+                A:'🄰', B:'🄱', C:'🄲', D:'🄳', E:'🄴', F:'🄵', G:'🄶', H:'🄷', I:'🄸', J:'🄹', K:'🄺', L:'🄻', M:'🄼', N:'🄽', O:'🄾', P:'🄿', Q:'🅀', R:'🅁', S:'🅂', T:'🅃', U:'🅄', V:'🅅', W:'🅆', X:'🅇', Y:'🅈', Z:'🅉',
+                a:'🄰', b:'🄱', c:'🄲', d:'🄳', e:'🄴', f:'🄵', g:'🄶', h:'🄷', i:'🄸', j:'🄹', k:'🄺', l:'🄻', m:'🄼', n:'🄽', o:'🄾', p:'🄿', q:'🅀', r:'🅁', s:'🅂', t:'🅃', u:'🅄', v:'🅅', w:'🅆', x:'🅇', y:'🅈', z:'🅉'
+            },
+            negativeSquared: {
+                A:'🅰', B:'🅱', C:'🅲', D:'🅳', E:'🅴', F:'🅵', G:'🅶', H:'🅷', I:'🅸', J:'🅹', K:'🅺', L:'🅻', M:'🅼', N:'🅽', O:'🅾', P:'🅿', Q:'🆀', R:'🆁', S:'🆂', T:'🆃', U:'🆄', V:'🆅', W:'🆆', X:'🆇', Y:'🆈', Z:'🆉',
+                a:'🅰', b:'🅱', c:'🅲', d:'🅳', e:'🅴', f:'🅵', g:'🅶', h:'🅷', i:'🅸', j:'🅹', k:'🅺', l:'🅻', m:'🅼', n:'🅽', o:'🅾', p:'🅿', q:'🆀', r:'🆁', s:'🆂', t:'🆃', u:'🆄', v:'🆅', w:'🆆', x:'🆇', y:'🆈', z:'🆉'
+            },
+            fullwidth: {
+                A:'Ａ', B:'Ｂ', C:'Ｃ', D:'Ｄ', E:'Ｅ', F:'Ｆ', G:'Ｇ', H:'Ｈ', I:'Ｉ', J:'Ｊ', K:'Ｋ', L:'Ｌ', M:'Ｍ', N:'Ｎ', O:'Ｏ', P:'Ｐ', Q:'Ｑ', R:'Ｒ', S:'Ｓ', T:'Ｔ', U:'Ｕ', V:'Ｖ', W:'Ｗ', X:'Ｘ', Y:'Ｙ', Z:'Ｚ',
+                a:'ａ', b:'ｂ', c:'ｃ', d:'ｄ', e:'ｅ', f:'ｆ', g:'ｇ', h:'ｈ', i:'ｉ', j:'ｊ', k:'ｋ', l:'ｌ', m:'ｍ', n:'ｎ', o:'ｏ', p:'ｐ', q:'ｑ', r:'ｒ', s:'ｓ', t:'ｔ', u:'ｕ', v:'ｖ', w:'ｗ', x:'ｘ', y:'ｙ', z:'ｚ',
+                '0':'０', '1':'１', '2':'２', '3':'３', '4':'４', '5':'５', '6':'６', '7':'７', '8':'８', '9':'９'
+            },
+            smallCaps: {
+                a:'ᴀ', b:'ʙ', c:'ᴄ', d:'ᴅ', e:'ᴇ', f:'ғ', g:'ɢ', h:'ʜ', i:'ɪ', j:'ᴊ', k:'ᴋ', l:'ʟ', m:'ᴍ', n:'ɴ', o:'ᴏ', p:'ᴘ', q:'ǫ', r:'ʀ', s:'s', t:'ᴛ', u:'ᴜ', v:'ᴠ', w:'ᴡ', x:'x', y:'ʏ', z:'ᴢ',
+                A:'ᴀ', B:'ʙ', C:'ᴄ', D:'ᴅ', E:'ᴇ', F:'ғ', G:'ɢ', H:'ʜ', I:'ɪ', J:'ᴊ', K:'ᴋ', L:'ʟ', M:'ᴍ', N:'ɴ', O:'ᴏ', P:'ᴘ', Q:'ǫ', R:'ʀ', S:'s', T:'ᴛ', U:'ᴜ', V:'ᴠ', W:'ᴡ', X:'x', Y:'ʏ', Z:'ᴢ'
+            },
+            upsideDown: {
+                A:'∀', B:'𐐒', C:'Ɔ', D:'◖', E:'Ǝ', F:'Ⅎ', G:'⅁', H:'H', I:'I', J:'ſ', K:'⋊', L:'⅂', M:'W', N:'N', O:'O', P:'Ԁ', Q:'Ò', R:'ᴚ', S:'S', T:'⊥', U:'∩', V:'Λ', W:'M', X:'X', Y:'⅄', Z:'Z',
+                a:'ɐ', b:'q', c:'ɔ', d:'p', e:'ǝ', f:'ɟ', g:'ƃ', h:'ɥ', i:'ᴉ', j:'ɾ', k:'ʞ', l:'l', m:'ɯ', n:'u', o:'o', p:'d', q:'b', r:'ɹ', s:'s', t:'ʇ', u:'n', v:'ʌ', w:'ʍ', x:'x', y:'ʎ', z:'z'
+            }
+        };
+
+        function fillUnicodeRange(map, upperStart, lowerStart, upperExceptions = {}) {
+            [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].forEach((ch, i) => map[ch] = upperExceptions[ch] || String.fromCodePoint(upperStart + i));
+            [...'abcdefghijklmnopqrstuvwxyz'].forEach((ch, i) => map[ch] = String.fromCodePoint(lowerStart + i));
+        }
+        fillUnicodeRange(UNICODE_MAPS.boldScript, 0x1D4D0, 0x1D4EA);
+        fillUnicodeRange(UNICODE_MAPS.fraktur, 0x1D504, 0x1D51E, {C:'ℭ', H:'ℌ', I:'ℑ', R:'ℜ'});
+        fillUnicodeRange(UNICODE_MAPS.boldFraktur, 0x1D56C, 0x1D586);
+        Object.assign(UNICODE_MAPS.boldItalic, {J:'𝑱'});
+        Object.assign(UNICODE_MAPS.doubleStruck, {v:'𝕧'});
+
+        // Combining Diacritic Overlays
+        const OVERLAYS = {
+            strikethrough: '\u0336',
+            underline: '\u0332',
+            doubleUnderline: '\u0333',
+            slash: '\u0338',
+            dotsAbove: '\u0307\u0308',
+            wave: '\u0330'
+        };
+
+        // Curated List of 45+ Frames & Brackets (Categorized by Clean, Gaming, Heavy, Decorative)
+        const FRAMES = [
+            // Clean & Minimal
+            { template: "【 TEXT 】", tag: "مربع نظيف", cat: "clean" },
+            { template: "『 TEXT 』", tag: "أقواس يابانية", cat: "clean" },
+            { template: "« TEXT »", tag: "أسهم مزدوجة", cat: "clean" },
+            { template: "‹ TEXT ›", tag: "أسهم كلاسيكية", cat: "clean" },
+            { template: "[ TEXT ]", tag: "أقواس مربعة", cat: "clean" },
+            { template: "( TEXT )", tag: "أقواس دائرية", cat: "clean" },
+            { template: "• TEXT •", tag: "نقاط ناعمة", cat: "clean" },
+            { template: "― TEXT ―", tag: "خطوط جانبية", cat: "clean" },
+            { template: "✦ TEXT ✦", tag: "نجوم متألقة", cat: "clean" },
+            { template: "╰┈➤ TEXT", tag: "سهم انسيابي", cat: "clean" },
+
+            // Gaming & Symbols
+            { template: "꧁༒☬ TEXT ☬༒꧂", tag: "أسطورة الألعاب", cat: "gaming" },
+            { template: "★彡[ TEXT ]彡★", tag: "نجوم الألعاب", cat: "gaming" },
+            { template: "▄︻̷̿┻̿═━一 TEXT ━一", tag: "قناص باتل جراوند", cat: "gaming" },
+            { template: "☠༒ TEXT ༒☠", tag: "جمجمة المحارب", cat: "gaming" },
+            { template: "『♔』TEXT『♔』", tag: "تاج الملك", cat: "gaming" },
+            { template: "★【 TEXT 】★", tag: "نجم مربع", cat: "gaming" },
+            { template: "•?((¯°·._.• TEXT •._.·°¯))؟•", tag: "موجة الجيمرز", cat: "gaming" },
+            { template: "░▒▓█ TEXT █▓▒░", tag: "بكسل ثلاثي", cat: "gaming" },
+            { template: "⫷ TEXT ⫸", tag: "أسهم قتالية", cat: "gaming" },
+            { template: "✦ TEXT ✦", tag: "صاعقة برق", cat: "gaming" },
+            { template: "♔ TEXT ♔", tag: "تاج ملكي", cat: "gaming" },
+
+            // Borders & Heavy Ornaments
+            { template: "❖ ── ✦ ──『 TEXT 』── ✦ ── ❖", tag: "إطار ملكي مزخرف", cat: "frames" },
+            { template: "✦━━━━ TEXT ━━━━✦", tag: "خط ذهبي", cat: "frames" },
+            { template: "ღ™ TEXT ™ღ", tag: "قلب ماركة", cat: "frames" },
+            { template: "╭─────── TEXT ───────╮", tag: "صندوق منحني", cat: "frames" },
+            { template: "I͆͆ TEXT I͆͆", tag: "أعمدة مزخرفة", cat: "frames" },
+            { template: "✧⃝✿ TEXT ✿⃝✧", tag: "زهور وأهلة", cat: "frames" },
+            { template: "┊┊┊┊ TEXT ┊┊┊┊", tag: "خطوط متقطعة", cat: "frames" },
+            { template: "✿ TEXT ✿", tag: "وردة ناعمة", cat: "frames" },
+            { template: "☆꧁ TEXT ꧂☆", tag: "أجنحة النجوم", cat: "frames" },
+            { template: "✧⁠.⁠*⁠:⁠・⁠ﾟTEXT", tag: "بريق النجوم", cat: "frames" },
+            { template: "•.¸♡ TEXT ♡¸.•", tag: "قلوب متسلسلة", cat: "frames" },
+            { template: "[̲̅$̲̅(̲̅ TEXT )̲̅$̲̅]", tag: "دولار مزخرف", cat: "frames" },
+            { template: "★·.·´¯`·.·★ TEXT ★·.·´¯`·.·★", tag: "أمواج نجمية", cat: "frames" },
+            { template: "♬♩♪♩ TEXT ♩♪♩♬", tag: "نوتات موسيقية", cat: "frames" },
+            { template: "☆━━━━ TEXT ━━━━☆", tag: "شريط النجوم", cat: "frames" },
+            { template: "(⁠っ⁠.⁠❛⁠ ⁠ᴗ⁠ ⁠❛⁠.⁠)⁠っ TEXT", tag: "حضن تعبيري", cat: "frames" },
+            { template: "╰──➢ TEXT", tag: "مؤشر عصري", cat: "frames" },
+            { template: "◦•●◉✿ TEXT ✿◉●•◦", tag: "دوائر وورد", cat: "frames" },
+            { template: "† TEXT †", tag: "رمز صليب زخرفي", cat: "frames" },
+            { template: "✦°TEXT°✦", tag: "درجات النجوم", cat: "frames" },
+            { template: "ꕥ TEXT ꕥ", tag: "شعار زهرة اللوتس", cat: "frames" }
+        ];
+
+        // Tashkeel / Arabic Combining Characters Sets
+        const TASHKEEL = {
+            light: ['َ', 'ُ', 'ِ', 'ً', 'ٌ', 'ٍ', 'ْ', 'ّ'],
+            heavy: ['َ', 'ً', 'ُ', 'ٌ', 'ِ', 'ٍ', 'ْ', 'ّ', 'ٰ', '۪', '۫', '۬', 'ۭ', '۟', '۠', 'ۡ', 'ۢ', 'ۜ']
+        };
+
+        // --- ARABIC DECORATION FUNCTIONS ---
+        const ARABIC_MARK_RE = /^[\u064B-\u065F\u0670\u06D6-\u06ED]$/u;
+
+        function decorateArabicTashkeelLight(text) {
+            const chars = [...text];
+            let index = 0;
+            return chars.map((char, i) => {
+                if (!/[\u0621-\u064A]/u.test(char)) return char;
+                // Keep existing user-supplied tashkeel intact.
+                if (chars[i + 1] && ARABIC_MARK_RE.test(chars[i + 1])) return char;
+                const mark = TASHKEEL.light[(char.codePointAt(0) + index * 3) % TASHKEEL.light.length];
+                index++;
+                return index % 3 === 0 ? char : char + mark;
+            }).join('');
+        }
+
+        function decorateArabicTashkeelHeavy(text) {
+            const chars = [...text];
+            let index = 0;
+            return chars.map((char, i) => {
+                if (!/[\u0621-\u064A]/u.test(char)) return char;
+                if (chars[i + 1] && ARABIC_MARK_RE.test(chars[i + 1])) return char;
+                const mark = TASHKEEL.heavy[(char.codePointAt(0) + index * 5) % TASHKEEL.heavy.length];
+                index++;
+                return char + mark + (index % 2 === 0 ? TASHKEEL.heavy[(index + 4) % TASHKEEL.heavy.length] : '');
+            }).join('');
+        }
+
+        // Split into user-perceived characters (keeps emoji and Arabic marks together).
+        function getGraphemes(text) {
+            if (typeof Intl !== 'undefined' && Intl.Segmenter) {
+                const segmenter = new Intl.Segmenter('ar', { granularity: 'grapheme' });
+                return [...segmenter.segment(text)].map(part => part.segment);
+            }
+            // Fallback for older WebViews: combine common Unicode marks with their base.
+            return [...text].reduce((out, ch) => {
+                if (/\p{M}/u.test(ch) && out.length) out[out.length - 1] += ch;
+                else out.push(ch);
+                return out;
+            }, []);
+        }
+
+        function firstArabicLetter(grapheme) {
+            return [...grapheme].find(ch => /[\u0621-\u064A\u066E-\u06D3\u06FA-\u06FC]/u.test(ch)) || '';
+        }
+
+        function decorateArabicKashida(text) {
+            const chars = getGraphemes(text);
+            const nonJoiners = new Set([...'ءاأإآٱدذرزؤةىو']);
+            let result = '';
+            chars.forEach((grapheme, i) => {
+                result += grapheme;
+                const current = firstArabicLetter(grapheme);
+                const next = chars[i + 1] ? firstArabicLetter(chars[i + 1]) : '';
+                if (current && next && !nonJoiners.has(current)) result += 'ـ';
+            });
+            return result;
+        }
+
+        function decorateArabicSpaced(text) {
+            return getGraphemes(text).join(' • ');
+        }
+
+        function decorateArabicKashidaDotted(text) {
+            let kashida = decorateArabicKashida(text);
+            return kashida.replace(/ـ/g, 'ـ’ـ');
+        }
+
+        // --- UNICODE MAPPER FUNCTION ---
+        function applyUnicodeMap(text, mapObj) {
+            return [...text].map(char => mapObj[char] || char).join('');
+        }
+
+        function applyOverlay(text, overlayChar) {
+            return getGraphemes(text).map(char => /^\s+$/u.test(char) ? char : char + overlayChar).join('');
+        }
+
+        function flipText(text) {
+            return getGraphemes(text).map(char => UNICODE_MAPS.upsideDown[char] || char).reverse().join('');
+        }
+
+        // Storage is optional (private mode, file:// and quota restrictions may block it).
+        function readStoredJSON(key, fallback, validate) {
+            try {
+                const raw = window.localStorage.getItem(key);
+                if (raw === null) return fallback;
+                const value = JSON.parse(raw);
+                return validate(value) ? value : fallback;
+            } catch (error) {
+                return fallback;
+            }
+        }
+
+        function writeStoredJSON(key, value) {
+            try {
+                window.localStorage.setItem(key, JSON.stringify(value));
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        function readStoredString(key, fallback = '') {
+            try {
+                const value = window.localStorage.getItem(key);
+                return typeof value === 'string' ? value : fallback;
+            } catch (error) {
+                return fallback;
+            }
+        }
+
+        // --- STATE & APP DATA ---
+        let state = {
+            inputText: "V.decorations",
+            activeCategory: "all",
+            searchQuery: "",
+            mixMode: true,
+            favorites: (() => {
+                const saved = readStoredJSON('v_decor_favs', [], Array.isArray);
+                return [...new Set(saved.filter(v => typeof v === 'string' && v.length > 0 && [...v].length <= 500))].slice(0, 300);
+            })(),
+            extraMixSeed: 0
+        };
+
+        // --- GENERATION ENGINE ---
+        function generateAllDecorations(text, mixMode) {
+            if (!text || text.trim() === '') return [];
+
+            const results = [];
+            const isEnglish = /[a-zA-Z]/.test(text);
+            const isArabic = /[\u0600-\u06FF]/.test(text);
+
+            // 1. Core Font Variations (English + General)
+            if (isEnglish) {
+                results.push({ id: 'en-bold', text: applyUnicodeMap(text, UNICODE_MAPS.bold), title: 'عريض (Bold)', cat: 'english' });
+                results.push({ id: 'en-italic', text: applyUnicodeMap(text, UNICODE_MAPS.italic), title: 'مائل (Italic)', cat: 'english' });
+                results.push({ id: 'en-bold-italic', text: applyUnicodeMap(text, UNICODE_MAPS.boldItalic), title: 'عريض مائل (Bold Italic)', cat: 'english' });
+                results.push({ id: 'en-script', text: applyUnicodeMap(text, UNICODE_MAPS.script), title: 'مخطوط رقعي (Script)', cat: 'english' });
+                results.push({ id: 'en-bold-script', text: applyUnicodeMap(text, UNICODE_MAPS.boldScript), title: 'مخطوط عريض (Bold Script)', cat: 'english' });
+                results.push({ id: 'en-fraktur', text: applyUnicodeMap(text, UNICODE_MAPS.fraktur), title: 'قوطي (Fraktur/Gothic)', cat: 'english' });
+                results.push({ id: 'en-bold-fraktur', text: applyUnicodeMap(text, UNICODE_MAPS.boldFraktur), title: 'قوطي عريض (Bold Fraktur)', cat: 'english' });
+                results.push({ id: 'en-double-struck', text: applyUnicodeMap(text, UNICODE_MAPS.doubleStruck), title: 'مزدوج التخطيط (Double Struck)', cat: 'english' });
+                results.push({ id: 'en-monospace', text: applyUnicodeMap(text, UNICODE_MAPS.monospace), title: 'برمجي أحادي (Monospace)', cat: 'english' });
+                results.push({ id: 'en-circled', text: applyUnicodeMap(text, UNICODE_MAPS.circled), title: 'داخل دوائر (Circled)', cat: 'english' });
+                results.push({ id: 'en-neg-circled', text: applyUnicodeMap(text, UNICODE_MAPS.negativeCircled), title: 'دوائر سوداء (Negative Circled)', cat: 'english' });
+                results.push({ id: 'en-squared', text: applyUnicodeMap(text, UNICODE_MAPS.squared), title: 'مربعات (Squared)', cat: 'english' });
+                results.push({ id: 'en-neg-squared', text: applyUnicodeMap(text, UNICODE_MAPS.negativeSquared), title: 'مربعات سوداء (Negative Squared)', cat: 'english' });
+                results.push({ id: 'en-fullwidth', text: applyUnicodeMap(text, UNICODE_MAPS.fullwidth), title: 'تباعد عريض (Fullwidth)', cat: 'english' });
+                results.push({ id: 'en-smallcaps', text: applyUnicodeMap(text, UNICODE_MAPS.smallCaps), title: 'حروف صغيرة عريضة (Small Caps)', cat: 'english' });
+                results.push({ id: 'en-flipped', text: flipText(text), title: 'مقلوب رأسًا على عقب (Flipped)', cat: 'english' });
+                results.push({ id: 'en-strikethrough', text: applyOverlay(text, OVERLAYS.strikethrough), title: 'مشطوب (Strikethrough)', cat: 'clean' });
+                results.push({ id: 'en-underline', text: applyOverlay(text, OVERLAYS.underline), title: 'مسطر (Underline)', cat: 'clean' });
+                results.push({ id: 'en-double-underline', text: applyOverlay(text, OVERLAYS.doubleUnderline), title: 'سطرين (Double Underline)', cat: 'clean' });
+                results.push({ id: 'en-slash', text: applyOverlay(text, OVERLAYS.slash), title: 'خطوط مائلة (Slash-through)', cat: 'clean' });
+            }
+
+            // 2. Arabic Specific Decorations
+            if (isArabic) {
+                results.push({ id: 'ar-tashkeel-light', text: decorateArabicTashkeelLight(text), title: 'تشكيل خفيف مرتب', cat: 'arabic' });
+                results.push({ id: 'ar-tashkeel-heavy', text: decorateArabicTashkeelHeavy(text), title: 'تشكيل مكثف مزخرف', cat: 'arabic' });
+                results.push({ id: 'ar-kashida', text: decorateArabicKashida(text), title: 'تطويل الحروف (كشيدة)', cat: 'arabic' });
+                results.push({ id: 'ar-kashida-dotted', text: decorateArabicKashidaDotted(text), title: 'تطويل منقط', cat: 'arabic' });
+                results.push({ id: 'ar-spaced', text: decorateArabicSpaced(text), title: 'حروف متباعدة بنقاط', cat: 'arabic' });
+            }
+
+            // 3. Frames & Brackets Engine (Applying text into Frames)
+            FRAMES.forEach((frame, idx) => {
+                const framedText = frame.template.replace('TEXT', text);
+                results.push({
+                    id: `frame-${idx}`,
+                    text: framedText,
+                    title: `${frame.tag}`,
+                    cat: frame.cat || 'frames'
+                });
+            });
+
+            // 4. Mixed Engine (Combining Styled Fonts/Tashkeel + Frames) if mixMode is enabled
+            if (mixMode) {
+                const fontBaseVariants = [];
+                if (isEnglish) {
+                    fontBaseVariants.push({ name: 'عريض', text: applyUnicodeMap(text, UNICODE_MAPS.bold) });
+                    fontBaseVariants.push({ name: 'مخطوط', text: applyUnicodeMap(text, UNICODE_MAPS.script) });
+                    fontBaseVariants.push({ name: 'قوطي', text: applyUnicodeMap(text, UNICODE_MAPS.boldFraktur) });
+                    fontBaseVariants.push({ name: 'مزدوج', text: applyUnicodeMap(text, UNICODE_MAPS.doubleStruck) });
+                    fontBaseVariants.push({ name: 'أحادي', text: applyUnicodeMap(text, UNICODE_MAPS.monospace) });
+                    fontBaseVariants.push({ name: 'دوائر', text: applyUnicodeMap(text, UNICODE_MAPS.circled) });
+                }
+                if (isArabic) {
+                    fontBaseVariants.push({ name: 'تشكيل', text: decorateArabicTashkeelLight(text) });
+                    fontBaseVariants.push({ name: 'كشيدة', text: decorateArabicKashida(text) });
+                }
+
+                // Combine selected base variants with random frames
+                FRAMES.forEach((frame, fIdx) => {
+                    fontBaseVariants.forEach((variant, vIdx) => {
+                        const combinedText = frame.template.replace('TEXT', variant.text);
+                        results.push({
+                            id: `mix-${fIdx}-${vIdx}`,
+                            text: combinedText,
+                            title: `${frame.tag} + ${variant.name}`,
+                            cat: frame.cat === 'gaming' ? 'gaming' : 'clean'
+                        });
+                    });
+                });
+            }
+
+            // 5. Extra Dynamic Generated Mixes (based on extraMixSeed)
+            if (state.extraMixSeed > 0 && FRAMES.length) {
+                const enVariants = [
+                    t => applyUnicodeMap(t, UNICODE_MAPS.bold),
+                    t => applyUnicodeMap(t, UNICODE_MAPS.italic),
+                    t => applyUnicodeMap(t, UNICODE_MAPS.boldItalic),
+                    t => applyUnicodeMap(t, UNICODE_MAPS.script),
+                    t => applyUnicodeMap(t, UNICODE_MAPS.boldScript),
+                    t => applyUnicodeMap(t, UNICODE_MAPS.fraktur),
+                    t => applyUnicodeMap(t, UNICODE_MAPS.boldFraktur),
+                    t => applyUnicodeMap(t, UNICODE_MAPS.doubleStruck),
+                    t => applyUnicodeMap(t, UNICODE_MAPS.monospace),
+                    t => applyUnicodeMap(t, UNICODE_MAPS.circled),
+                    t => applyUnicodeMap(t, UNICODE_MAPS.negativeCircled),
+                    t => applyUnicodeMap(t, UNICODE_MAPS.squared),
+                    t => applyUnicodeMap(t, UNICODE_MAPS.negativeSquared),
+                    t => applyUnicodeMap(t, UNICODE_MAPS.fullwidth),
+                    t => applyUnicodeMap(t, UNICODE_MAPS.smallCaps),
+                    t => applyOverlay(t, OVERLAYS.underline),
+                    t => applyOverlay(t, OVERLAYS.strikethrough),
+                    t => applyOverlay(t, OVERLAYS.slash),
+                    t => flipText(t)
+                ];
+                const arVariants = [
+                    t => decorateArabicTashkeelLight(t),
+                    t => decorateArabicTashkeelHeavy(t),
+                    t => decorateArabicKashida(t),
+                    t => decorateArabicKashidaDotted(t),
+                    t => decorateArabicSpaced(t),
+                    t => applyOverlay(t, OVERLAYS.underline),
+                    t => applyOverlay(t, OVERLAYS.doubleUnderline)
+                ];
+                const symbols = ['★', '✦', '✦', '♔', '✿', '❖', '༒', '☬', '꧁', '꧂', '•', '✧', '☠', '🔥'];
+                const seen = new Set(results.map(item => item.text));
+                let added = 0;
+                const total = Math.min(400, Math.max(0, state.extraMixSeed) * 20);
+                let seed = 2166136261;
+                for (const ch of `${text}|${state.extraMixSeed}`) seed = Math.imul(seed ^ ch.codePointAt(0), 16777619) >>> 0;
+                const next = max => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed % max; };
+
+                for (let attempt = 0; attempt < total * 8 && added < total; attempt++) {
+                    const frame = FRAMES[next(FRAMES.length)];
+                    const variants = isEnglish && isArabic ? [...enVariants, ...arVariants] : (isEnglish ? enVariants : (isArabic ? arVariants : [t => t]));
+                    let processed = variants[next(variants.length)](text);
+                    if (attempt % 3 === 1) {
+                        const s = symbols[next(symbols.length)];
+                        processed = `${s} ${processed} ${s}`;
+                    }
+                    const value = frame.template.replace('TEXT', processed);
+                    if (seen.has(value)) continue;
+                    seen.add(value);
+                    added++;
+                    results.push({
+                        id: `extra-mix-${state.extraMixSeed}-${added}`,
+                        text: value,
+                        title: `مزيج مبتكر #${added}`,
+                        cat: frame.cat || 'gaming'
+                    });
+                }
+            }
+
+            const seenTexts = new Set();
+            return results.filter(item => {
+                if (seenTexts.has(item.text)) return false;
+                seenTexts.add(item.text);
+                return true;
+            });
+
+        }
+
+        function decodeDataText(value) {
+            try { return decodeURIComponent(value || ''); }
+            catch (error) { return ''; }
+        }
+
+        // --- RENDER & DOM INTERACTION ---
+        const grid = document.getElementById('decorations-grid');
+        const emptyState = document.getElementById('empty-state');
+        const mainInput = document.getElementById('main-input');
+        const charCount = document.getElementById('char-count');
+        const searchFilter = document.getElementById('search-filter');
+        const resultsCountEl = document.getElementById('results-count');
+        const badgeAllEl = document.getElementById('badge-count-all');
+        const badgeFavEl = document.getElementById('badge-count-fav');
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const btnClear = document.getElementById('btn-clear');
+        const toggleMixMode = document.getElementById('toggle-mix-mode');
+        const btnMoreMixes = document.getElementById('btn-more-mixes');
+        const btnQuickRandom = document.getElementById('btn-quick-random');
+        const btnCopyAll = document.getElementById('btn-copy-all');
+
+        // Cache generated decorations so searching/categories don't regenerate them.
+        let generatedCacheKey = '';
+        let generatedCache = [];
+        let visibleResults = [];
+        let visibleLimit = 24;
+        const RESULTS_PER_BATCH = 24;
+
+        function getGeneratedDecorations(rawText) {
+            const key = `${rawText}\u0000${state.mixMode}\u0000${state.extraMixSeed}`;
+            if (key !== generatedCacheKey) {
+                generatedCache = generateAllDecorations(rawText, state.mixMode);
+                generatedCacheKey = key;
+            }
+            return generatedCache;
+        }
+
+        function makeDecorationCard(item) {
+            const isFav = state.favorites.includes(item.text);
+            const card = document.createElement('div');
+            card.className = 'decor-card card-solid rounded-2xl p-4 flex flex-col justify-between gap-3 border border-slate-800/80 light:border-slate-200/80 hover:border-brand-500/50 light:hover:border-brand-500/50 shadow-md hover:shadow-xl transition relative group overflow-hidden';
+            card.innerHTML = `
+                <div class="flex items-center justify-between gap-2 border-b border-slate-800/40 light:border-slate-100 pb-2">
+                    <span class="text-[11px] font-bold text-slate-400 light:text-slate-500 flex items-center gap-1.5"><i class="fa-solid fa-hashtag text-brand-500/70"></i>${escapeHtml(item.title)}</span>
+                    <button class="btn-fav text-slate-500 hover:text-amber-400 transition text-sm p-1" data-text="${encodeURIComponent(item.text)}" title="${isFav ? 'إزالة من المفضلة' : 'إضافة للمفضلة'}"><i class="${isFav ? 'fa-solid fa-star text-amber-400' : 'fa-regular fa-star'}"></i></button>
+                </div>
+                <div class="py-2 px-1 my-auto overflow-x-auto text-center scrollbar-none"><span class="decor-text font-semibold text-lg sm:text-xl text-slate-100 light:text-slate-900 tracking-wide select-all" dir="auto">${escapeHtml(item.text)}</span></div>
+                <div class="pt-2 border-t border-slate-800/40 light:border-slate-100 flex items-center justify-between">
+                    <span class="text-[10px] text-slate-500 font-mono">${[...item.text].length} رموز</span>
+                    <button class="btn-copy px-3.5 py-1.5 rounded-xl bg-brand-600/20 hover:bg-brand-600 text-brand-300 hover:text-white border border-brand-500/30 font-semibold text-xs transition flex items-center gap-1.5" data-text="${encodeURIComponent(item.text)}"><i class="fa-regular fa-copy"></i><span>نسخ</span></button>
+                </div>`;
+            return card;
+        }
+
+        function renderVisibleResults(append = false) {
+            const oldMore = document.getElementById('btn-load-more-results');
+            if (oldMore) oldMore.remove();
+            const fragment = document.createDocumentFragment();
+            const from = append ? grid.querySelectorAll('.decor-card').length : 0;
+            const to = Math.min(visibleLimit, visibleResults.length);
+            for (let i = from; i < to; i++) fragment.appendChild(makeDecorationCard(visibleResults[i]));
+            if (!append) grid.replaceChildren();
+            grid.appendChild(fragment);
+
+            if (to < visibleResults.length) {
+                const more = document.createElement('button');
+                more.id = 'btn-load-more-results';
+                more.className = 'col-span-full mx-auto my-3 px-6 py-3 rounded-xl bg-brand-600 text-white font-bold shadow-lg';
+                more.textContent = `عرض ${Math.min(RESULTS_PER_BATCH, visibleResults.length - to)} نتيجة إضافية (${to} من ${visibleResults.length})`;
+                more.addEventListener('click', () => {
+                    visibleLimit += RESULTS_PER_BATCH;
+                    renderVisibleResults(true);
+                }, { once: true });
+                grid.appendChild(more);
+            }
+        }
+
+        function updateUI() {
+            const rawText = getGraphemes(mainInput.value).slice(0, 80).join('');
+            if (mainInput.value !== rawText) mainInput.value = rawText;
+            state.inputText = rawText;
+            charCount.textContent = `${getGraphemes(rawText).length} / 80 حرف`;
+
+            const allGenerated = state.activeCategory === 'favorites'
+                ? state.favorites.map((value, index) => ({ id: `favorite-${index}`, text: value, title: 'من المفضلة', cat: 'favorites' }))
+                : getGeneratedDecorations(rawText);
+            const q = state.searchQuery.trim().toLowerCase();
+            visibleResults = allGenerated.filter(item => {
+                if (state.activeCategory !== 'all' && state.activeCategory !== 'favorites' && item.cat !== state.activeCategory) return false;
+                return !q || item.text.toLowerCase().includes(q) || item.title.toLowerCase().includes(q);
+            });
+
+            resultsCountEl.textContent = visibleResults.length;
+            badgeAllEl.textContent = allGenerated.length;
+            badgeFavEl.textContent = state.favorites.length;
+            visibleLimit = RESULTS_PER_BATCH;
+
+            if (!visibleResults.length) {
+                grid.replaceChildren();
+                emptyState.classList.remove('hidden');
+                grid.classList.add('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                grid.classList.remove('hidden');
+                renderVisibleResults(false);
+            }
+        }
+
+        // --- HELPER UTILITIES ---
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        async function copyToClipboard(text, successMessage = 'تم نسخ الزخرفة بنجاح!') {
+            if (typeof text !== 'string' || !text.length) return false;
+
+            // Try the modern API first, then fall back for file:// and older Android WebViews.
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(text);
+                    showToast(successMessage);
+                    return true;
+                }
+            } catch (err) {
+                // Continue to the legacy fallback below.
+            }
+
+            let textarea;
+            try {
+                textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.setAttribute('readonly', '');
+                textarea.setAttribute('aria-hidden', 'true');
+                textarea.style.position = 'fixed';
+                textarea.style.top = '0';
+                textarea.style.left = '-9999px';
+                textarea.style.opacity = '0';
+                textarea.style.fontSize = '16px';
+                document.body.appendChild(textarea);
+                textarea.focus();
+                textarea.select();
+                textarea.setSelectionRange(0, textarea.value.length);
+
+                const copied = document.execCommand && document.execCommand('copy');
+                if (!copied) throw new Error('Clipboard unavailable');
+                showToast(successMessage);
+                return true;
+            } catch (err) {
+                showToast('تعذر النسخ؛ حدّد النص وانسخه يدويًا');
+                return false;
+            } finally {
+                if (textarea && textarea.parentNode) textarea.remove();
+            }
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container'); container.replaceChildren();
+            const toast = document.createElement('div');
+            toast.className = 'pointer-events-auto bg-slate-900 light:bg-slate-800 text-slate-100 px-4 py-2.5 rounded-2xl shadow-2xl border border-brand-500/40 text-xs sm:text-sm font-bold flex items-center gap-2 transform translate-y-4 opacity-0 transition duration-300';
+            toast.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400"></i> <span></span>';
+            toast.querySelector('span').textContent = String(message);
+            
+            container.appendChild(toast);
+
+            // Animate in
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-4', 'opacity-0');
+            });
+
+            // Remove after 2.5s
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 2200);
+        }
+
+        // --- EVENT LISTENERS ---
+        // Input typing
+        let _dt; mainInput.addEventListener('input', () => { clearTimeout(_dt); _dt = setTimeout(updateUI, 150); });
+
+        // Clear input
+        btnClear.addEventListener('click', () => {
+            mainInput.value = '';
+            mainInput.focus();
+            updateUI();
+        });
+
+        // Search Filter
+        searchFilter.addEventListener('input', (e) => {
+            state.searchQuery = e.target.value;
+            updateUI();
+        });
+
+        // Sample Chips
+        document.querySelectorAll('.sample-chip').forEach(btn => {
+            btn.addEventListener('click', () => {
+                mainInput.value = btn.getAttribute('data-text');
+                updateUI();
+            });
+        });
+
+        // Toggle Mix Mode
+        toggleMixMode.addEventListener('change', (e) => {
+            state.mixMode = e.target.checked;
+            updateUI();
+        });
+
+        // Generate More Mixes
+        btnCopyAll.addEventListener('click', () => {
+            const q = state.searchQuery.trim().toLowerCase();
+            // Reuse the exact generated set shown on screen, including extra mixes.
+            const sourceItems = state.activeCategory === 'favorites'
+                ? state.favorites.map((value, index) => ({ id: `favorite-${index}`, text: value, title: 'من المفضلة', cat: 'favorites' }))
+                : getGeneratedDecorations(mainInput.value);
+            const items = sourceItems.filter(item => {
+                if (state.activeCategory !== 'all' && state.activeCategory !== 'favorites' && item.cat !== state.activeCategory) return false;
+                return !q || item.text.toLowerCase().includes(q) || item.title.toLowerCase().includes(q);
+            });
+            if (!items.length) return showToast('لا توجد نتائج لنسخها');
+            copyToClipboard(items.map(item => item.text).join('\n'), `تم نسخ ${items.length} نتيجة`);
+        });
+
+        btnMoreMixes.addEventListener('click', () => {
+            if (state.extraMixSeed >= 20) return showToast('وصلت للحد الأقصى من التشكيلات الإضافية');
+            const prevCount = getGeneratedDecorations(mainInput.value).length;
+            state.extraMixSeed++;
+            const nextCount = getGeneratedDecorations(mainInput.value).length;
+            const addedNow = nextCount - prevCount;
+
+            if (state.activeCategory === 'favorites') {
+                const allTab = document.querySelector('.tab-btn[data-cat="all"]');
+                if (allTab) allTab.click();
+            } else {
+                updateUI();
+            }
+
+            visibleLimit = Math.max(visibleLimit + RESULTS_PER_BATCH, Math.min(nextCount, 72));
+            renderVisibleResults(false);
+
+            showToast(addedNow > 0 ? `تمت إضافة ${addedNow} تشكيلة جديدة!` : 'تم تحديث التشكيلات');
+        });
+
+        // Quick Random Copy Button
+        btnQuickRandom.addEventListener('click', () => {
+            const randomText = mainInput.value || 'V.decorations';
+            const allDecorations = randomText === mainInput.value && mainInput.value
+                ? getGeneratedDecorations(randomText)
+                : generateAllDecorations(randomText, true);
+            if (allDecorations.length > 0) {
+                const randomItem = allDecorations[Math.floor(Math.random() * allDecorations.length)];
+                copyToClipboard(randomItem.text);
+            }
+        });
+
+        // Categories Tabs Switcher
+        document.getElementById('categories-tabs').addEventListener('click', (e) => {
+            const tabBtn = e.target.closest('.tab-btn');
+            if (!tabBtn) return;
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white', 'shadow-lg', 'shadow-brand-500/25');
+                btn.classList.add('bg-slate-800/80', 'light:bg-slate-200', 'text-slate-300', 'light:text-slate-700');
+            });
+
+            tabBtn.classList.remove('bg-slate-800/80', 'light:bg-slate-200', 'text-slate-300', 'light:text-slate-700');
+            tabBtn.classList.add('bg-brand-600', 'text-white', 'shadow-lg', 'shadow-brand-500/25');
+
+            state.activeCategory = tabBtn.getAttribute('data-cat');
+            updateUI();
+        });
+
+        // Grid Click Delegation (Copy & Favorites)
+        grid.addEventListener('click', (e) => {
+            // Copy button click
+            const copyBtn = e.target.closest('.btn-copy');
+            if (copyBtn) {
+                const rawText = decodeDataText(copyBtn.getAttribute('data-text'));
+                copyToClipboard(rawText).then(copied => {
+                    if (!copied || !copyBtn.isConnected) return;
+                    const originalHtml = copyBtn.innerHTML;
+                    copyBtn.innerHTML = `<i class="fa-solid fa-check text-emerald-400"></i> <span>تم!</span>`;
+                    copyBtn.classList.add('bg-emerald-600/30', 'border-emerald-500/50');
+                    setTimeout(() => {
+                        if (!copyBtn.isConnected) return;
+                        copyBtn.innerHTML = originalHtml;
+                        copyBtn.classList.remove('bg-emerald-600/30', 'border-emerald-500/50');
+                    }, 1500);
+                });
+                return;
+            }
+
+            // Favorite star click
+            const favBtn = e.target.closest('.btn-fav');
+            if (favBtn) {
+                const rawText = decodeDataText(favBtn.getAttribute('data-text'));
+                const index = state.favorites.indexOf(rawText);
+
+                if (index > -1) {
+                    state.favorites.splice(index, 1);
+                    showToast('تمت الإزالة من المفضلة');
+                } else {
+                    if (state.favorites.length >= 300) {
+                        showToast('وصلت المفضلة إلى الحد الأقصى (300)');
+                        return;
+                    }
+                    state.favorites.push(rawText);
+                    showToast('تمت الإضافة للمفضلة ⭐');
+                }
+
+                if (!writeStoredJSON('v_decor_favs', state.favorites)) {
+                    // Keep the in-memory UI consistent with the last persisted state.
+                    if (index > -1) state.favorites.splice(index, 0, rawText);
+                    else state.favorites = state.favorites.filter(value => value !== rawText);
+                    showToast('تعذر حفظ المفضلة على هذا الجهاز');
+                }
+                updateUI();
+                return;
+            }
+        });
+
+        
+// ===== Bottom navigation =====
+const VIEWS = {text:'view-text', symbols:'view-symbols', big:'view-big'};
+function showView(v) {
+    Object.entries(VIEWS).forEach(([k, id]) => document.getElementById(id).classList.toggle('hidden', k !== v));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.view === v));
+    if (v === 'symbols') initSymbols();
+    if (v === 'big') renderBig();
+    window.scrollTo({top: 0});
+}
+document.getElementById('bottom-nav').addEventListener('click', e => {
+    const b = e.target.closest('.nav-btn'); if (b) showView(b.dataset.view);
+});
+
+// ===== Symbols =====
+const R = (a, b) => { const o = []; for (let c = a; c <= b; c++) { const ch = String.fromCodePoint(c); if (/\P{Cn}/u.test(ch)) o.push(ch); } return o; };
+const W = s => s.split(' ').filter(Boolean);
+const flags = W('EG SA AE KW QA BH OM JO LB SY IQ PS YE LY TN DZ MA SD US GB FR DE IT ES TR RU CN JP KR IN BR CA AU').map(c => [...c].map(x => String.fromCodePoint(127397 + x.charCodeAt(0))).join(''));
+const SYM_CATS = [
+ {n:'نجوم ونقاط', k:'نجمة نجوم نقاط دوائر', i:W('✦ ✧ ✩ ✪ ✫ ✬ ✭ ✮ ✯ ✰ ★ ☆ ⚝ ⍟ ✴ ✵ ✶ ✷ ✸ ✹ ✺ ✻ ✼ ✽ ✾ ❇ ❈ ❉ ❊ ❋ ⁂ ※ ⁎ ⁑ ⁕ ∗ ⋆ ˚ ° · • ∙ ● ○ ◌ ◍ ◎ ◉ ⦿ ⚬ ⁺ ₊ ⊹ ꙳')},
+ {n:'زهور ونباتات', k:'زهور ورد وردة نبات', i:W('❀ ✿ ❁ ❃ ❂ ✾ ✽ ❋ ⚘ ⚜ ❦ ❧ ☘ ✤ ✥ ❄ ❅ ❆ ✢ ✣ ꕥ ꕤ ꕣ')},
+ {n:'قلوب', k:'قلب قلوب حب', i:W('♡ ♥ ❥ ❣ ღ ෴ ♢ ♦')},
+ {n:'أقواس وإطارات', k:'اقواس إطار اطارات', i:R(0x2768,0x2775).concat(W('《 》 〈 〉 「 」 『 』 【 】 〔 〕 〖 〗 ⟦ ⟧ ⟨ ⟩ « » ‹ › ⌈ ⌉ ⌊ ⌋ ༺ ༻ ꧁ ꧂ ༒ ☬ ⫷ ⫸ ⦅ ⦆ ﴾ ﴿ ﹏ ﹎ ‿ ⁀'))},
+ {n:'زخارف عربية وإسلامية', k:'عربي اسلامي تشكيل هلال', i:W('﷽ ﷺ ﷻ ۞ ۩ ؏ ؎ ؆ ؇ ٭ ۝ ۽ ۾ ﷼ ☪ ☫ ☾ ☽ ﴾ ﴿ ـَ ـُ ـِ ـّ ـْ ـً ـٌ ـٍ ـٰ ـٖ ـٗ ـ')},
+ {n:'وجوه نصية (كاومواجي)', k:'كاومواجي وجوه نصية', w:1, i:'(◕‿◕)|( ͡° ͜ʖ ͡°)|ಠ_ಠ|¯\\_(ツ)_/¯|(╥﹏╥)|(づ｡◕‿‿◕｡)づ|ʕ•ᴥ•ʔ|(≧▽≦)|(ง\'̀-\'́)ง|✧◝(⁰▿⁰)◜✧|(っ◔◡◔)っ ♥|(ಥ﹏ಥ)|(ᵔᴥᵔ)|(¬‿¬)|(☞ﾟヮﾟ)☞|(╯°□°）╯︵ ┻━┻|٩(◕‿◕)۶|(︶︹︺)|(｡•́︿•̀｡)|☜(ﾟヮﾟ☜)'.split('|')},
+ {n:'موسيقى وأدوات', k:'موسيقى اداوات ادوات', i:W('♩ ♪ ♫ ♬ ♭ ♮ ♯ ✂ ✏ ✒')},
+ {n:'عملات', k:'عملة عملات فلوس', i:W('$ ¢ £ ¥ € ﷼ ؋').concat(R(0x20A0,0x20C0))},
+ {n:'أسهم', k:'سهم اسهم', i:R(0x2190,0x21FF).concat(R(0x2794,0x27BE), R(0x27F0,0x27FF), R(0x2900,0x297F), R(0x2B05,0x2B07))},
+ {n:'أشكال هندسية', k:'شكل اشكال مربع دائرة', i:R(0x25A0,0x25FF)},
+ {n:'رموز متنوعة', k:'رموز متنوعة', i:R(0x2600,0x26FF).filter(ch => !/[\u{1F300}-\u{1FAFF}]/u.test(ch))},
+ {n:'دنجبات', k:'دنجبات زخرفة', i:R(0x2701,0x2727).concat(R(0x2776,0x2793))},
+ {n:'رياضيات', k:'رياضيات حساب', i:R(0x2200,0x22FF)},
+ {n:'خطوط وصناديق', k:'خطوط صناديق بلوكات', i:R(0x2500,0x259F)},
+ {n:'بريل ونقاط', k:'بريل نقاط', i:R(0x2800,0x28FF)},
+ {n:'حروف وأرقام محاطة', k:'ارقام حروف دوائر مربعات', i:R(0x2460,0x24FF)},
+ {n:'رموز وحروف خاصة', k:'خاصة حروف ارقام رومانية', i:W('⁰ ¹ ² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹ ₀ ₁ ₂ ₃ ₄ ₅ ₆ ₇ ₈ ₉ ª º © ® ™ ℗ ℠ № ℅ ℃ ℉ Ω ♾ ‰ § ¶ † ‡').concat(R(0x2160,0x217F), R(0x2100,0x214F))}
+];
+SYM_CATS.forEach(cat => {
+    cat.i = cat.i.filter(item => {
+        if (cat.w) return true;
+        return ![...item].some(ch => /[\u{1F1E6}-\u{1F1FF}\u{1F300}-\u{1FAFF}]/u.test(ch));
+    });
+});
+const normAr = t => t.toLowerCase().replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي');
+let symInit = false;
+let recent = [...new Set(readStoredJSON('v_decor_recent', [], Array.isArray)
+    .filter(x => typeof x === 'string' && x.length > 0 && [...x].length <= 32))].slice(0, 18);
+function fillCat(sec) {
+    const c = SYM_CATS[sec.dataset.i];
+    sec.querySelector('.symgrid').innerHTML = c.i.map(x => `<button class="sym">${escapeHtml(x)}</button>`).join('');
+    sec.style.minHeight = '';
+}
+function renderRecent() {
+    document.getElementById('sym-recent-wrap').classList.toggle('hidden', !recent.length);
+    document.getElementById('sym-recent').innerHTML = recent.map(x => `<button class="sym">${escapeHtml(x)}</button>`).join('');
+}
+function initSymbols() {
+    if (symInit) return; symInit = true;
+    const box = document.getElementById('sym-list');
+    box.innerHTML = SYM_CATS.map((c, i) => `<section class="symcat" data-i="${i}" style="min-height:${Math.ceil(c.i.length / (c.w ? 2 : 6)) * 60 + 40}px"><h3 class="symh"><span>${c.n}</span><span>${c.i.length}</span></h3><div class="symgrid${c.w ? ' wide' : ''}"></div></section>`).join('');
+    if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { io.unobserve(en.target); fillCat(en.target); } }), {rootMargin: '500px'});
+        box.querySelectorAll('.symcat').forEach(sec => io.observe(sec));
+    } else {
+        box.querySelectorAll('.symcat').forEach(fillCat);
+    }
+    renderRecent();
+    let t; document.getElementById('sym-search').addEventListener('input', e => {
+        clearTimeout(t); t = setTimeout(() => {
+            const q = normAr(e.target.value.trim());
+            box.querySelectorAll('.symcat').forEach(sec => { const c = SYM_CATS[sec.dataset.i]; sec.classList.toggle('hidden', !!q && !normAr(c.n + ' ' + c.k).includes(q)); });
+        }, 150);
+    });
+    const onTap = async e => {
+        const b = e.target.closest('.sym'); if (!b) return;
+        const x = b.textContent;
+        const copied = await copyToClipboard(x, 'تم نسخ ' + (getGraphemes(x).length > 8 ? 'الرمز' : x));
+        if (!copied) return;
+        b.classList.add('ok'); setTimeout(() => b.classList.remove('ok'), 350);
+        if (navigator.vibrate) navigator.vibrate(10);
+        recent = [x, ...recent.filter(r => r !== x)].slice(0, 18);
+        writeStoredJSON('v_decor_recent', recent);
+        renderRecent();
+    };
+    box.addEventListener('click', onTap);
+    document.getElementById('sym-recent').addEventListener('click', onTap);
+}
+
+// ===== Big writing (Arabic + English, 100% copyable monochrome & Unicode) =====
+const PIX = {};
+"A:14,17,31,17,17;B:30,17,30,17,30;C:15,16,16,16,15;D:30,17,17,17,30;E:31,16,30,16,31;F:31,16,30,16,16;G:15,16,19,17,15;H:17,17,31,17,17;I:31,4,4,4,31;J:1,1,1,17,14;K:17,18,28,18,17;L:16,16,16,16,31;M:17,27,21,17,17;N:17,25,21,19,17;O:14,17,17,17,14;P:30,17,30,16,16;Q:14,17,17,18,13;R:30,17,30,18,17;S:15,16,14,1,30;T:31,4,4,4,4;U:17,17,17,17,14;V:17,17,17,10,4;W:17,17,21,27,17;X:17,10,4,10,17;Y:17,10,4,4,4;Z:31,2,4,8,31;0:14,19,21,25,14;1:4,12,4,4,14;2:14,1,6,8,31;3:30,1,14,1,30;4:18,18,31,2,2;5:31,16,30,1,30;6:14,16,30,17,14;7:31,1,2,4,4;8:14,17,14,17,14;9:14,17,15,1,14;!:4,4,4,0,4;?:14,1,6,0,4;.:0,0,0,0,4;-:0,0,31,0,0;_:0,0,0,0,31; :0,0,0,0,0".split(';').forEach(e => { const [k, v] = e.split(':'); PIX[k] = v.split(',').map(Number); });
+
+// 5x5 Pixel glyphs for Arabic characters
+const AR_PIX = {
+    'ا': [4,4,4,4,4],
+    'أ': [6,4,4,4,4],
+    'إ': [4,4,4,4,6],
+    'آ': [14,0,4,4,4],
+    'ب': [0,17,17,31,4],
+    'ت': [10,0,17,17,31],
+    'ث': [4,10,17,17,31],
+    'ج': [14,2,12,18,15],
+    'ح': [14,2,12,16,15],
+    'خ': [4,14,2,12,15],
+    'د': [12,2,2,2,30],
+    'ذ': [4,12,2,2,30],
+    'ر': [0,2,2,4,24],
+    'ز': [4,2,2,4,24],
+    'س': [0,21,21,31,0],
+    'ش': [4,10,21,31,0],
+    'ص': [0,14,17,31,0],
+    'ض': [4,14,17,31,0],
+    'ط': [8,8,14,10,31],
+    'ظ': [10,8,14,10,31],
+    'ع': [14,16,12,16,15],
+    'غ': [4,14,16,12,15],
+    'ف': [4,14,10,14,31],
+    'ق': [10,14,10,14,31],
+    'ك': [14,8,14,2,30],
+    'ل': [2,2,2,18,14],
+    'م': [0,14,10,31,16],
+    'ن': [4,0,17,17,14],
+    'ه': [0,14,21,21,14],
+    'ة': [10,14,17,17,14],
+    'و': [0,14,10,14,24],
+    'ؤ': [4,14,10,14,24],
+    'ي': [14,16,14,1,30],
+    'ى': [14,16,14,1,30],
+    'ئ': [4,14,16,14,30],
+    'ء': [0,12,8,14,0]
+};
+Object.assign(PIX, AR_PIX);
+
+// Monochrome, 100% copyable block styles only (no colored emojis)
+const BIG_STYLES = [
+    ['█','░','مكعبات صلبة (ANSI)'],
+    ['█','　','مكعبات عريضة'],
+    ['▓','░','ظل كثيف'],
+    ['▒','░','شبكي'],
+    ['★','☆','نجوم'],
+    ['●','○','دوائر'],
+    ['◆','◇','معينات'],
+    ['▲','△','مثلثات'],
+    ['♥','♡','قلوب أحادية'],
+    ['◼','◻','مربعات ناعمة'],
+    ['✦','　','بريق']
+];
+
+const BIG_MAPS = [
+    ['مربعات سوداء ضخمة', UNICODE_MAPS.negativeSquared, 1],
+    ['مربعات مفرغة', UNICODE_MAPS.squared, 1],
+    ['دوائر سوداء', UNICODE_MAPS.negativeCircled, 1],
+    ['دوائر مفرغة', UNICODE_MAPS.circled, 0],
+    ['عرض كامل', UNICODE_MAPS.fullwidth, 0],
+    ['قوطي عريض', UNICODE_MAPS.boldFraktur, 0],
+    ['قوطي كلاسيكي', UNICODE_MAPS.fraktur, 0],
+    ['مخطوط عريض', UNICODE_MAPS.boldScript, 0],
+    ['مزدوج التخطيط', UNICODE_MAPS.doubleStruck, 0],
+    ['عريض مائل', UNICODE_MAPS.boldItalic, 0],
+    ['عريض', UNICODE_MAPS.bold, 0],
+    ['برمجي أحادي', UNICODE_MAPS.monospace, 0],
+    ['حروف صغيرة عريضة', UNICODE_MAPS.smallCaps, 0]
+];
+
+function orderedChars(txt) {
+    // Reverse RTL Arabic text visually so ASCII/Block art reads right-to-left properly
+    const hasAr = /[\u0600-\u06FF]/.test(txt);
+    const chars = [...txt];
+    return hasAr ? chars.reverse() : chars;
+}
+
+function bigLines(txt, f, e) {
+    const rows = ['', '', '', '', ''];
+    orderedChars(txt).forEach(ch => {
+        const g = PIX[ch];
+        if (!g) {
+            rows[0] += '  ';
+            rows[1] += '  ';
+            rows[2] += ch + e;
+            rows[3] += '  ';
+            rows[4] += '  ';
+            return;
+        }
+        for (let r = 0; r < 5; r++) {
+            let line = '';
+            for (let b = 4; b >= 0; b--) line += (g[r] >> b) & 1 ? f : e;
+            rows[r] += line + e;
+        }
+    });
+    return rows.join('\n');
+}
+
+function ansiShadowLines(txt) {
+    const rows = ['', '', '', '', '', ''];
+    orderedChars(txt).forEach(ch => {
+        const g = PIX[ch];
+        if (!g) {
+            for (let r = 0; r < 6; r++) rows[r] += (r === 2 ? ch + ' ' : '  ');
+            return;
+        }
+        const grid = Array.from({length: 6}, () => Array(6).fill(' '));
+        for (let r = 0; r < 5; r++) {
+            for (let b = 4; b >= 0; b--) {
+                if ((g[r] >> b) & 1) {
+                    const c = 4 - b;
+                    grid[r][c] = '█';
+                    if (grid[r][c + 1] === ' ') grid[r][c + 1] = '╗';
+                    if (grid[r + 1][c] === ' ') grid[r + 1][c] = '═';
+                    if (grid[r + 1][c + 1] === ' ') grid[r + 1][c + 1] = '╝';
+                }
+            }
+        }
+        for (let r = 0; r < 6; r++) rows[r] += grid[r].join('') + ' ';
+    });
+    return rows.join('\n');
+}
+
+let bigOut = [];
+function renderBig() {
+    const raw = document.getElementById('big-input').value.trim().slice(0, 10);
+    const up = raw.toUpperCase(), list = document.getElementById('big-list');
+    const isArabic = /[\u0600-\u06FF]/.test(raw);
+    const isEnglish = /[a-zA-Z0-9]/.test(raw);
+    bigOut = [];
+    if (![...up].some(c => PIX[c] && c !== ' ')) {
+        list.innerHTML = '<div class="bigcard" style="text-align:center;color:#94a3b8">اكتب حروف أو أرقام (عربي أو إنجليزي) لتظهر الكتابة الكبيرة</div>'; return;
+    }
+    const cards = [];
+    // 1. ANSI Shadow ASCII Art (works for both Arabic & English!)
+    cards.push(['ANSI Shadow (3D)', ansiShadowLines(up), 1]);
+
+    // 2. Monochrome Pixel Block Styles (works for both Arabic & English!)
+    BIG_STYLES.forEach(([f, e, n]) => cards.push([n, bigLines(up, f, e), 1]));
+
+    // 3. Arabic large copyable styles when Arabic is entered
+    if (isArabic) {
+        const arKashida = decorateArabicKashida(raw);
+        const arTashkeel = decorateArabicTashkeelHeavy(decorateArabicKashida(raw));
+        cards.push(['كشيدة ملكية بإطار', `꧁༒☬ ${arKashida} ☬༒꧂`, 0]);
+        cards.push(['تشكيل وكشيدة عريضة', `【 ${arTashkeel} 】`, 0]);
+        cards.push(['حروف متباعدة بنقاط', [...raw].join(' • '), 0]);
+        cards.push(['مربعات عربية', [...raw].filter(c => c !== ' ').map(c => `[${c}]`).join('-'), 0]);
+    }
+
+    // 4. English Unicode Big Maps & Framed Styles when English is entered
+    if (isEnglish) {
+        BIG_MAPS.forEach(([n, m, upper]) => cards.push([n, [...(upper ? up : raw)].map(c => m[c] || c).join(' '), 0]));
+        const boldSpaced = [...up].map(c => UNICODE_MAPS.bold[c] || c).join(' • ');
+        const doubleFramed = `【 ${[...up].map(c => UNICODE_MAPS.doubleStruck[c] || c).join(' ')} 】`;
+        const gothicFramed = `꧁༒ ${[...raw].map(c => UNICODE_MAPS.boldFraktur[c] || c).join(' ')} ༒꧂`;
+        const boxedDash = [...up].map(c => `[${UNICODE_MAPS.bold[c] || c}]`).join('-');
+        cards.push(['عريض بنقاط كبيرة', boldSpaced, 0]);
+        cards.push(['مزدوج بإطار', doubleFramed, 0]);
+        cards.push(['قوطي ملكي', gothicFramed, 0]);
+        cards.push(['مربعات متصلة', boxedDash, 0]);
+    }
+
+    bigOut = cards.map(c => c[1]);
+    list.innerHTML = cards.map((c, i) => `<div class="bigcard"><div class="symh" style="margin:0"><span>${c[0]}</span><button class="cbtn" data-i="${i}">نسخ</button></div><pre class="bigpre" style="${c[2] ? '' : 'font-size:22px;line-height:1.4'}">${escapeHtml(c[1])}</pre></div>`).join('');
+}
+(() => { let t; document.getElementById('big-input').addEventListener('input', () => { clearTimeout(t); t = setTimeout(renderBig, 200); }); })();
+document.getElementById('big-list').addEventListener('click', e => {
+    const b = e.target.closest('.cbtn'); if (b) copyToClipboard(bigOut[b.dataset.i], 'تم نسخ الكتابة الكبيرة');
+});
+
+// Theme Toggle (Dark / Light)
+        function applyTheme(theme) {
+            const root = document.documentElement;
+            const isLight = theme === 'light';
+            root.classList.toggle('light', isLight);
+            root.classList.toggle('dark', !isLight);
+            try { window.localStorage.setItem('v_decor_theme', isLight ? 'light' : 'dark'); } catch (error) {}
+            const themeColor = document.querySelector('meta[name="theme-color"]');
+            if (themeColor) themeColor.setAttribute('content', isLight ? '#f8fafc' : '#0f172a');
+            const ic = document.getElementById('theme-icon'); if (ic) ic.textContent = isLight ? '☀️' : '🌙';
+            
+            
+            
+            themeToggleBtn.title = isLight ? 'تفعيل الوضع الليلي' : 'تفعيل الوضع النهاري';
+            themeToggleBtn.setAttribute('aria-label', themeToggleBtn.title);
+        }
+        themeToggleBtn.addEventListener('click', () => {
+            applyTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark');
+        });
+        // Init Theme on Load
+        let savedTheme = 'dark';
+        savedTheme = readStoredString('v_decor_theme', 'dark') === 'light' ? 'light' : 'dark';
+        applyTheme(savedTheme);
+
+        // Initial Render
+        window.addEventListener('DOMContentLoaded', () => {
+            updateUI();
+        });
+
+        // Tiny tap feedback: works for static and dynamically-created buttons.
+        document.addEventListener('click', (event) => {
+            const button = event.target.closest('button');
+            if (!button || button.disabled) return;
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            // Restart only this short feedback animation; the action itself is never delayed.
+            button.classList.remove('tap-feedback');
+            requestAnimationFrame(() => {
+                if (button.isConnected && !button.disabled) button.classList.add('tap-feedback');
+            });
+        }, true);
+
+        document.addEventListener('animationend', (event) => {
+            if (event.animationName === 'buttonTap') {
+                event.target.classList.remove('tap-feedback');
+            }
+        });
+
+    </script>
+</body>
+</html>
